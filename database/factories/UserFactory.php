@@ -2,6 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\Reply;
 use App\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
@@ -37,7 +38,7 @@ $factory->define(\App\Thread::class, function (Faker $faker) {
     ];
 });
 
-$factory->define(\App\Reply::class, function (Faker $faker) {
+$factory->define(Reply::class, function (Faker $faker) {
     return [
         'user_id' => function () {
             return factory('App\User')->create()->id;
