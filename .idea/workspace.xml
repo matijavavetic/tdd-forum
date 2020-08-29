@@ -121,6 +121,7 @@
       <path value="$PROJECT_DIR$/vendor/sebastian/exporter" />
       <path value="$PROJECT_DIR$/vendor/sebastian/code-unit-reverse-lookup" />
       <path value="$PROJECT_DIR$/vendor/sebastian/type" />
+      <path value="$PROJECT_DIR$/vendor/laravel/ui" />
     </include_path>
   </component>
   <component name="ProjectId" id="1gld1G6sBU6ooGlPpQaWnupn3wb" />
@@ -149,7 +150,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1598692895975</updated>
-      <workItem from="1598692896992" duration="2736000" />
+      <workItem from="1598692896992" duration="4782000" />
     </task>
     <servers />
   </component>
@@ -157,6 +158,10 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="346" y="303" width="568" height="874" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1598698873496">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state x="346" y="303" width="568" height="874" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.27.2560.1413@0.27.2560.1413" timestamp="1598698873496" />
     <state width="1234" height="395" key="GridCell.Tab.0.bottom" timestamp="1598693158926">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
