@@ -3,11 +3,8 @@
 namespace Tests\Feature;
 
 use App\Thread;
-use App\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CreateThreadTest extends TestCase
@@ -19,8 +16,8 @@ class CreateThreadTest extends TestCase
     {
         $this->expectException(AuthenticationException::class);
         $this->withoutExceptionHandling();
-        
-        $thread = factory(Thread::class)->make();
+
+        $thread = make(Thread::class);
 
         $this->post('/threads', $thread->toArray());
     }
@@ -28,11 +25,9 @@ class CreateThreadTest extends TestCase
     /** @test */
     public function an_auth_user_can_create_new_forum_threads()
     {
-        $user = factory(User::class)->create();
+        $this->signIn();
 
-        $this->actingAs($user);
-
-        $thread = factory(Thread::class)->make();
+        $thread = make(Thread::class);
 
         $this->post('/threads', $thread->toArray());
 
