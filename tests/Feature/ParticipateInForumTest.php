@@ -7,8 +7,6 @@ use App\Thread;
 use App\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ParticipateInForumTest extends TestCase
@@ -18,7 +16,8 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     public function unauth_user_may_not_add_replies()
     {
-        $this->expectException('Illuminate\Auth\AuthException');
+        $this->expectException(AuthenticationException::class);
+        $this->withoutExceptionHandling();
 
         $this->post('/threads/1/replies', []);
     }
