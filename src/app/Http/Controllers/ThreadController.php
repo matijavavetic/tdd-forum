@@ -8,22 +8,37 @@ use Illuminate\Http\Request;
 
 class ThreadController extends Controller
 {
+    /**
+     * ThreadsController constructor.
+     */
     public function __construct()
     {
         $this->middleware('auth')->except(['index', 'show']);
     }
+
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
+     * @param  Channel $channel
+     * @return \Illuminate\Http\Response
      */
     public function index(Channel $channel)
     {
         if ($channel->exists) {
-            $threads = $channel->threads()->latest()->get();
+            $threads = $channel->threads()->latest();
         } else {
-            $threads = Thread::latest()->get();
+            $threads = Thread::latest();
         }
+
+        // if request('by'), we should filter by the given username.
+        if ($username = request('by')) {
+            $user = \App\User::where('name', $username)->firstOrFail();
+
+            $threads->where('user_id', $user->id);
+        }
+
+        $threads = $threads->get();
 
         return view('threads.index', compact('threads'));
     }
@@ -31,7 +46,7 @@ class ThreadController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -41,9 +56,8 @@ class ThreadController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
-     * @throws \Illuminate\Validation\ValidationException
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -55,8 +69,8 @@ class ThreadController extends Controller
 
         $thread = Thread::create([
             'user_id' => auth()->id(),
-            'title' => request('title'),
             'channel_id' => request('channel_id'),
+            'title' => request('title'),
             'body' => request('body')
         ]);
 
@@ -66,8 +80,9 @@ class ThreadController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Thread  $thread
-     * @return Thread|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param  integer     $channelId
+     * @param  \App\Thread $thread
+     * @return \Illuminate\Http\Response
      */
     public function show($channelId, Thread $thread)
     {
@@ -77,7 +92,7 @@ class ThreadController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Thread  $thread
+     * @param  \App\Thread $thread
      * @return \Illuminate\Http\Response
      */
     public function edit(Thread $thread)
@@ -88,8 +103,8 @@ class ThreadController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Thread  $thread
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Thread              $thread
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Thread $thread)
@@ -100,7 +115,7 @@ class ThreadController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Thread  $thread
+     * @param  \App\Thread $thread
      * @return \Illuminate\Http\Response
      */
     public function destroy(Thread $thread)
