@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Channel;
+use App\Filters\ThreadFilters;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -20,22 +21,16 @@ class ThreadController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  Channel $channel
-     * @return \Illuminate\Http\Response
+     * @param Channel $channel
+     * @param \App\Http\Controllers\ThreadFilters $filters
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
-    public function index(Channel $channel)
+    public function index(Channel $channel, ThreadFilters $filters)
     {
+        $threads = Thread::latest()->filter($filters);
+
         if ($channel->exists) {
-            $threads = $channel->threads()->latest();
-        } else {
-            $threads = Thread::latest();
-        }
-
-        // if request('by'), we should filter by the given username.
-        if ($username = request('by')) {
-            $user = \App\User::where('name', $username)->firstOrFail();
-
-            $threads->where('user_id', $user->id);
+            $threads->where('channel_id', $channel->id);
         }
 
         $threads = $threads->get();
@@ -46,7 +41,7 @@ class ThreadController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function create()
     {
@@ -57,7 +52,7 @@ class ThreadController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      */
     public function store(Request $request)
     {
@@ -82,7 +77,7 @@ class ThreadController extends Controller
      *
      * @param  integer     $channelId
      * @param  \App\Thread $thread
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function show($channelId, Thread $thread)
     {
